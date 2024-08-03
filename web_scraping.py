@@ -9,9 +9,13 @@ html = html_bytes.decode("utf-8") # to decode the bytes to a string using UTF-8
 # get the title of HTML
 
 # <title.*?> berarti karakter awalnya <title dan setelahnya bisa karakter apa aja dengan jumlah zero atau lebih hingga >
-pattern = "<title.*?>.*?</title.*?>"
-match_results = re.search(pattern, html, re.IGNORECASE)
-title = match_results.group()
-title = re.sub("<.*?>", "", title)
+for string in ["Profile: ", "Name: ", "Favorite Color: "]:
+    string_start_idx = html.find(string)
+    text_start_idx = string_start_idx + len(string)
 
-print(title)
+    next_html_tag_offset = html[text_start_idx:].find("<")
+    text_end_idx = text_start_idx + next_html_tag_offset
+
+    raw_text = html[text_start_idx:text_end_idx]
+    clean_text = raw_text.strip(" \r\n\t")
+    print(clean_text)
