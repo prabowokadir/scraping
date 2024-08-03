@@ -9,3 +9,8 @@ Tips and trick:
     c. Pattern "?" have two different function i.e
         * Greedy vs. non-greedy, if "?" used after "*" or "+" then it becomes non-greedy. For example "a.*b" from string "aabacb" then it will be "aab".
         * Zero or one, if it's used after character or group then it will match zero or one based on the element before it. For example "a?b" can be "b" or "ab".
+4. HTML parser will be explicitly designed for parsing out HTML parser. One of the Python tools is BeautifulSoup
+    a. .find_all() return a list of all instances of the particular tag
+    b. Each object has a .name property that returns a string containing the HTML tag type
+    c. To get the HTML attributes of the tag object then we need to put their attribute name on single bracket such as ['attribute_name']
+5. MechnanicalSoup is a popular and relatively straighforward package to use when working with web pages interactively
