@@ -35,7 +35,25 @@ matches = matches[0]
 # get and store the shooting data on pandas
 shoot = soup_team.find_all("a")
 shoot = [s.get("href") for s in shoot]
-shoot = [s for s in shoot if s and 'all_comps/shooting/' in s]
+shoot = [s for s in shoot if s and "all_comps/shooting/" in s]
 shoot = shoot[0]
 
-print(shoot)
+# get and store the goalkeeping data on pandas
+keeper = soup_team.find_all("a")
+keeper = [k.get("href") for k in keeper]
+keeper = [k for k in keeper if k and "all_comps/keeper" in k]
+keeper = keeper[0]
+
+# get and store the passing data on pandas
+pass_ = soup_team.find_all("a")
+pass_ = [p.get("href") for p in pass_]
+pass_ = [p for p in pass_ if p and "all_comps/passing" in p]
+pass_ = pass_[0]
+
+# get and store the passing types data on pandas
+pass_types = soup_team.find_all("a")
+pass_types = [p.get("href") for p in pass_types]
+pass_types = [p for p in pass_types if p and "all_comps/passing_types" in p]
+pass_types = pass_types[0]
+
+print(pass_types)
