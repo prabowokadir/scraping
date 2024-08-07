@@ -32,4 +32,10 @@ soup_team = BeautifulSoup(html_team, "html.parser")
 matches = pd.read_html(html_team, match="Scores & Fixtures")
 matches = matches[0]
 
-print(soup_team)
+# get and store the shooting data on pandas
+shoot = soup_team.find_all("a")
+shoot = [s.get("href") for s in shoot]
+shoot = [s for s in shoot if s and 'all_comps/shooting/' in s]
+shoot = shoot[0]
+
+print(shoot)
