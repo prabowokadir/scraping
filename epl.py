@@ -1,9 +1,17 @@
+import time
+import requests
 import pandas as pd
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 
 # open and read the HTML
 url = "https://fbref.com/en/comps/9/2023-2024/2023-2024-Premier-League-Stats"
+
+response = requests.get(url)
+if response.status_code == 429:
+    retry_after = int(response.headers.get("Retry-After", 60)) # default wait for 60s if there're no header
+    time.sleep(retry_after)
+
 page = urlopen(url)
 html = page.read().decode("utf-8")
 
@@ -19,41 +27,39 @@ links = [l.get("href") for l in links]
 links = [l for l in links if '/squads/' in l]
 
 team_urls = [f"https://fbref.com{l}" for l in links]
-team_urls = team_urls[0]
 
-# open and read the HTML team
-page_team = urlopen(team_urls)
-html_team = page_team.read().decode("utf-8")
+for i in range(len(team_urls)):
+    team_name = team_urls[i].split("/")[-1].replace("-Stats", '').replace("-", " ")
 
-# create BeautifulSoup object for HTML team
-soup_team = BeautifulSoup(html_team, "html.parser")
+    # open and read the HTML team
+    page_team = urlopen(team_urls[i])
+    html_team = page_team.read().decode("utf-8")
 
-# store the scores and fixtures data on pandas
-matches = pd.read_html(html_team, match="Scores & Fixtures")
-matches = matches[0]
+    # create BeautifulSoup object for HTML team
+    soup_team = BeautifulSoup(html_team, "html.parser")
 
-# get and store the shooting data on pandas
-shoot = soup_team.find_all("a")
-shoot = [s.get("href") for s in shoot]
-shoot = [s for s in shoot if s and "all_comps/shooting/" in s]
-shoot = shoot[0]
+    # store the scores and fixtures data on pandas
+    matches = pd.read_html(html_team, match="Scores & Fixtures")
+    matches = matches[0]
 
-# get and store the goalkeeping data on pandas
-keeper = soup_team.find_all("a")
-keeper = [k.get("href") for k in keeper]
-keeper = [k for k in keeper if k and "all_comps/keeper" in k]
-keeper = keeper[0]
+    attr = ["shooting", "keeper", "passing", "passing_types", "gca", "defense", "possession", "misc"]
+    table = ["Shooting", "Goalkeeping", "Passing", "Pass Types", "Goal and Shot Creation",
+             "Defensive Actions", "Possession", "Miscellaneous Stats"]
 
-# get and store the passing data on pandas
-pass_ = soup_team.find_all("a")
-pass_ = [p.get("href") for p in pass_]
-pass_ = [p for p in pass_ if p and "all_comps/passing" in p]
-pass_ = pass_[0]
+    print(f"{team_name}:")
 
-# get and store the passing types data on pandas
-pass_types = soup_team.find_all("a")
-pass_types = [p.get("href") for p in pass_types]
-pass_types = [p for p in pass_types if p and "all_comps/passing_types" in p]
-pass_types = pass_types[0]
+    for j in range(len(attr)):
+        data = soup_team.find_all("a")
+        data = [d.get("href") for d in data]
+        data = [d for d in data if d and f"all_comps/{attr[j]}/" in d]
+        data = f"https://fbref.com{data[0]}"
+        data = urlopen(data)
+        data = data.read().decode("utf-8")
+        data = pd.read_html(data, match=table[j])
+        data = data[0]
+        
+        print(f"Statistics of {table[j]} successfully retrieved")
+    
+    print("\n")
 
-print(pass_types)
+    time.sleep(120)
