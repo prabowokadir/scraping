@@ -62,4 +62,4 @@ for i in range(len(team_urls)):
     
     print("\n")
 
-    time.sleep(120)
+    time.sleep(60)

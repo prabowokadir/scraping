@@ -1,5 +1,4 @@
 import time
-import requests
 import pandas as pd
 import pandas_gbq
 from bs4 import BeautifulSoup
@@ -9,7 +8,7 @@ from urllib.request import urlopen
 url = "https://fbref.com/en/comps/9/Premier-League-Stats"
 
 # season
-years = list(range(2024, 2010, -1))
+years = list(range(2024, 2022, -1))
 
 for year in years:
     page = urlopen(url)
@@ -25,22 +24,35 @@ for year in years:
     url = f"https://fbref.com{previous_season}"
 
     for team_url in team_urls:
-        team_name = team_url.split("/")[-1].replace("-Stats", "").replace("-", " ")
+        print(team_url)
+        print(url)
+        # team_name = team_url.split("/")[-1].replace("-Stats", "").replace("-", " ")
         
-        # open and read the HTML team
-        page_team = urlopen(team_url)
-        html_team = page_team.read().decode("utf-8")
+        # # open and read the HTML team
+        # page_team = urlopen(team_url)
+        # html_team = page_team.read().decode("utf-8")
 
-        # create BeautifulSoup object for HTML team
-        soup_team = BeautifulSoup(html_team, "html.parser")
+        # # create BeautifulSoup object for HTML team
+        # soup_team = BeautifulSoup(html_team, "html.parser")
 
-        # store the scores and fixtures data on pandas
-        matches = pd.read_html(html_team, match="Scores & Fixtures")
-        matches = matches[0]
+        # # store the scores and fixtures data on pandas
+        # matches = pd.read_html(html_team, match="Scores & Fixtures")
+        # matches = matches[0]
 
-        matches.columns = [c.lower() for c in matches.columns]
-        matches.columns = [c.replace(" ", "_") for c in matches.columns]
+        # matches.columns = [c.lower() for c in matches.columns]
+        # matches.columns = [c.replace(" ", "_") for c in matches.columns]
+        # matches["season"] = year
+        # matches["team_name"] = team_name
 
-        pandas_gbq.to_gbq(
-            matches, "raw."
-        )
+        # pandas_gbq.to_gbq(
+        #     matches,
+        #     "raw.premier_league",
+        #     project_id="sacred-bonbon-399703",
+        #     if_exists="append"
+        # )
+
+        time.sleep(60)
+
+    print(f"Premier League season {str(year-1)}-{str(year)} has been done.")
+
+    time.sleep(60)
