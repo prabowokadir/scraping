@@ -57,6 +57,7 @@ data = urlopen(data)
 data = data.read().decode("utf-8")
 data = pd.read_html(data, match="Shooting")
 data = data[0]
+data.columns = data.columns.droplevel(0)
 
 # print(f"Statistics of {table[j]} successfully retrieved")
 

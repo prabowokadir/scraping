@@ -51,28 +51,6 @@ for i in range(3):
             if_exists="append"
         )
 
-        attr = ["shooting", "keeper", "passing", "passing_types", "gca", "defense", "possession", "misc"]
-        table = ["Shooting", "Goalkeeping", "Passing", "Pass Types", "Goal and Shot Creation",
-                "Defensive Actions", "Possession", "Miscellaneous Stats"]
-        
-        for j in range(len(attr)):
-            data = soup_team.find_all("a")
-            data = [d.get("href") for d in data]
-            data = [d for d in data if d and f"all_comps/{attr[j]}/" in d]
-            data = f"https://fbref.com{data[0]}"
-            data = urlopen(data)
-            data = data.read().decode("utf-8")
-            data = pd.read_html(data, match=table[j])
-            data = data[0]
-            # need to add several line so the pandas column will not have multiple layer, create the lower case, replace " ", and changes data type
-
-            pandas_gbq.to_gbq(
-                data,
-                f"raw.premier_league_{attr[j]}_stats",
-                project_id=project_id,
-                if_exists="append"
-            )
-
     print(f"Premier League season {str(start_year)}-{str(start_year+1)} has been done.")
 
     start_year-=1
