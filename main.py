@@ -1,5 +1,6 @@
 from credentials import get_credentials
-from scraper import matches_data, shooting_data
+from scraper_matches import matches_data
+from scraper_shoots import shooting_data
 from bigquery_utils import upload_to_bigquery
 import time
 import argparse
@@ -19,7 +20,10 @@ def main(start_year, project_id, dataset_id, iterations):
 
         # Store data to BigQuery
         upload_to_bigquery(matches, table_matches_id, project_id, credentials)
-        upload_to_bigquery(matches, table_shoots_id, project_id, credentials)
+        
+        time.sleep(5)
+
+        upload_to_bigquery(shoots, table_shoots_id, project_id, credentials)
         print(f"Premier League season {start_year}-{start_year+1} data uploaded.")
 
         # Move to previous season
