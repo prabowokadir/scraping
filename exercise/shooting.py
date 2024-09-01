@@ -32,7 +32,7 @@ for i in range(3):
         html_team = page_team.read().decode("utf-8")
 
         # create the BeautifulSoup object for HTML team
-        soup_team = BeautifulSoup(html, "html.parser")
+        soup_team = BeautifulSoup(html_team, "html.parser")
 
         # get the shooting stats data
         data = soup_team.find_all("a")

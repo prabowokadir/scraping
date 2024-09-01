@@ -1,24 +1,25 @@
 from credentials import get_credentials
-from scraper import scraper_premier_league_data
+from scraper import matches_data, shooting_data
 from bigquery_utils import upload_to_bigquery
 import time
 import argparse
 
-def main(start_year, project_id, dataset_id, table, iterations):
-    url = f"https://fbref.com/en/comps/9/{start_year}-{start_year+1}/{start_year}-{start_year+1}-Premier-League-Stats"
-    project_id = project_id
-    dataset_id = dataset_id
-    table_id = f"{project_id}.{dataset_id}.{table}"
+def main(start_year, project_id, dataset_id, iterations):
+    table_matches_id = f"{project_id}.{dataset_id}.premier_league_matches_stats"
+    table_shoots_id = f"{project_id}.{dataset_id}.premier_league_shoots_stats"
 
     # Get credentials
     credentials = get_credentials()
 
     for _ in range(iterations):
         # Scrape data
-        df = scraper_premier_league_data(url, start_year)
+        url = f"https://fbref.com/en/comps/9/{start_year}-{start_year+1}/{start_year}-{start_year+1}-Premier-League-Stats"
+        matches = matches_data(url, start_year)
+        shoots = shooting_data(url, start_year)
 
         # Store data to BigQuery
-        upload_to_bigquery(df, table_id, credentials)
+        upload_to_bigquery(matches, table_matches_id, project_id, credentials)
+        upload_to_bigquery(matches, table_shoots_id, project_id, credentials)
         print(f"Premier League season {start_year}-{start_year+1} data uploaded.")
 
         # Move to previous season
@@ -44,11 +45,6 @@ if __name__ == "__main__":
         help="The BigQuery dataset ID where the data will be stored."
     )
     parser.add_argument(
-        "table_name", 
-        type=str, 
-        help="The BigQuery table name where the data will be uploaded."
-    )
-    parser.add_argument(
         "iterations", 
         type=int, 
         help="The number of seasons to scrape and upload."
@@ -62,6 +58,5 @@ if __name__ == "__main__":
         args.start_year, 
         args.project_id, 
         args.dataset_id, 
-        args.table_name, 
         args.iterations
     )
