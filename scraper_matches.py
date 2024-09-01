@@ -27,6 +27,6 @@ def matches_data(url, start_year):
         matches["ga"] = matches["ga"].astype("str")
         matches_frames.append(matches)
 
-        time.sleep(5)
+        time.sleep(30)
     
     return pd.concat(matches_frames, ignore_index=True)
