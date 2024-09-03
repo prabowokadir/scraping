@@ -5,7 +5,7 @@ import time
 import argparse
 
 def main(start_year, project_id, dataset_id, iterations):
-    table_shoots_id = f"{project_id}.{dataset_id}.premier_league_shoots_stats"
+    table_matches_id = f"{project_id}.{dataset_id}.premier_league_matches_stats"
 
     # Get credentials
     credentials = get_credentials()
