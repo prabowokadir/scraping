@@ -1,6 +1,6 @@
 # scraping
 
-Tips and trick:
+BeautifulSoup:
 1. Always check the target website's accepatable policy to see if accessing the website with automated tools is a violation of its terms of use.
 2. urllib accessed the website similarly when open the browser, instead of rendering the content visually it shows the source code as text.
 3. Regular expressions or regexes are pattern that can be used to search for text within a string.
@@ -15,3 +15,8 @@ Tips and trick:
     c. To get the HTML attributes of the tag object then we need to put their attribute name on single bracket such as ['attribute_name'].
 5. MechnanicalSoup is a popular and relatively straighforward package to use when working with web pages interactively.
 6. Almost all websites lock us out and report the IP address if they see us making too many failed requests.
+
+Scrapy:
+1. To initiate the project we can use the command scrapy startproject projectname.
+2. In projectname/spiders folder then use the command scrapy genspider function_name urldomain.
+3. Use the command scrapy shell to use the shell ipython.
