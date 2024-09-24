@@ -20,3 +20,5 @@ Scrapy:
 1. To initiate the project we can use the command scrapy startproject projectname.
 2. In projectname/spiders folder then use the command scrapy genspider function_name urldomain.
 3. Use the command scrapy shell to use the shell ipython.
+4. If we want to fetch the url simply run fetch('https://url.com').
+5. To close the shell ipython simply type exit.
